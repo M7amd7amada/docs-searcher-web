@@ -1,0 +1,76 @@
+@model List<PdfResult>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Search Results</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: #fff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #555;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #333;
+            color: #fff;
+        }
+
+        tr:nth-child(even) {
+            background-color: #444;
+        }
+
+        tr:hover {
+            background-color: #555;
+        }
+    </style>
+</head>
+<body>
+    <h2>Search Results</h2>
+
+    @if (Model.Count > 0)
+    {
+        var groupedResults = Model.GroupBy(result => result.BookName);
+
+        foreach (var group in groupedResults)
+        {
+            <h3>@group.Key</h3> 
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Page Number</th>
+                        <th>Keyword Count</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var result in group)
+                    {
+                        <tr>
+                            <td><a href="@result.PageLink" target="_blank">@result.PageNumber</a></td>
+                            <td>@result.KeywordCount</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    }
+    else
+    {
+        <p>No results found.</p>
+    }
+</body>
+</html>
